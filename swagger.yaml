@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: "1.0.1"
+  version: "1.0"
   title: Clash Royale API
   description: Unofficial Swagger definition for the official Clash Royale API
   termsOfService: http://supercell.com/en/terms-of-service/
