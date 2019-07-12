@@ -929,19 +929,6 @@ components:
           $ref: '#/components/schemas/WarStandingClan'
         trophyChange:
           type: integer
-    PlayerBase:
-      type: object
-      properties:
-        tag:
-          type: string
-        name:
-          type: string
-        expLevel:
-          type: integer
-        trophies:
-          type: integer
-        arena:
-          $ref: '#/components/schemas/Arena'
     ClanMember:
       type: object
       properties:
@@ -1100,101 +1087,88 @@ components:
           type: integer
         bestTrophies:
           type: integer
+    PlayerBase:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
     PlayerDetail:
-      allOf:
-        - $ref: '#/components/schemas/PlayerBase'
-        - type: object
-          properties:
-            bestTrophies:
-              type: integer
-            wins:
-              type: integer
-            losses:
-              type: integer
-            battleCount:
-              type: integer
-            threeCrownWins:
-              type: integer
-            challengeCardsWon:
-              type: integer
-            challengeMaxWins:
-              type: integer
-            tournamentCardsWon:
-              type: integer
-            tournamentBattleCount:
-              type: integer
-            role:
-              type: string
-            donations:
-              type: integer
-            donationsReceived:
-              type: integer
-            totalDonations:
-              type: integer
-            warDayWins:
-              type: integer
-            clanCardsCollected:
-              type: integer
-            clan:
-              $ref: '#/components/schemas/ClanBase'
-            arena:
-              $ref: '#/components/schemas/Arena'
-            leagueStatistics:
-              type: object
-              properties:
-                currentSeason:
-                  $ref: '#/components/schemas/SeasonStatistics'
-                previousSeason:
-                  $ref: '#/components/schemas/SeasonStatistics'
-                bestSeason:
-                  $ref: '#/components/schemas/SeasonStatistics'
-            achievements:
-              type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  stars:
-                    type: integer
-                  value:
-                    type: integer
-                  target:
-                    type: integer
-                  info:
-                    type: string
-            cards:
-              type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  level:
-                    type: integer
-                  maxLevel:
-                    type: integer
-                  count:
-                    type: integer
-                  iconUrls:
-                    type: object
-                    properties:
-                      medium:
-                        type: string
-            currentFavouriteCard:
-              type: object
-              properties:
-                name:
-                  type: string
-                id:
-                  type: integer
-                maxLevel:
-                  type: integer
-                iconUrls:
-                  type: object
-                  properties:
-                    medium:
-                      type: string
+      type: object
+      properties:
+        bestTrophies:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        battleCount:
+          type: integer
+        threeCrownWins:
+          type: integer
+        challengeCardsWon:
+          type: integer
+        challengeMaxWins:
+          type: integer
+        tournamentCardsWon:
+          type: integer
+        tournamentBattleCount:
+          type: integer
+        role:
+          type: string
+        donations:
+          type: integer
+        donationsReceived:
+          type: integer
+        totalDonations:
+          type: integer
+        warDayWins:
+          type: integer
+        clanCardsCollected:
+          type: integer
+        clan:
+          $ref: '#/components/schemas/ClanBase'
+        arena:
+          $ref: '#/components/schemas/Arena'
+        leagueStatistics:
+          $ref: '#/components/schemas/PlayerLeagueStatistics'
+        achievements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerAchievements'
+        cards:
+          $ref: '#/components/schemas/CardList'
+        currentFavouriteCard:
+          $ref: '#/components/schemas/Card'
+    PlayerLeagueStatistics:
+      type: object
+      properties:
+        currentSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+        previousSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+        bestSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+    PlayerAchievements:
+      type: object
+      properties:
+        name:
+          type: string
+        stars:
+          type: integer
+        value:
+          type: integer
+        target:
+          type: integer
+        info:
+          type: string
     UpcomingChestsList:
       type: object
       properties:
@@ -1223,23 +1197,7 @@ components:
         clan:
           $ref: '#/components/schemas/ClanBase'
         cards:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              level:
-                type: integer
-              maxLevel:
-                type: integer
-              iconUrls:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    medium:
-                      type: string
+          $ref: '#/components/schemas/CardList'
     BattleLog:
       type: array
       items:
@@ -1323,25 +1281,27 @@ components:
                     type: integer
                   clan:
                     $ref: '#/components/schemas/ClanBase'
+    Card:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        maxLevel:
+          type: integer
+        iconUrls:
+          type: object
+          properties:
+            medium:
+              type: string
     CardList:
       type: object
       properties:
         items:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-              id:
-                type: integer
-              maxLevel:
-                type: integer
-              iconUrls:
-                type: object
-                properties:
-                  medium:
-                    type: string
+            $ref: '#/components/schemas/Card'
     LocationList:
       type: object
       properties:
