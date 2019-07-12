@@ -363,7 +363,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BattleLog'
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleLogEntry'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -838,11 +840,6 @@ components:
           type: integer
         name:
           type: string
-
-    BattleLog:
-      type: array
-      items:
-        $ref: '#/components/schemas/BattleLogEntry'
 
     BattleLogEntry:
       type: object
