@@ -853,21 +853,13 @@ components:
         arena:
           $ref: '#/components/schemas/Arena'
         gameMode:
-          $ref: '#/components/schemas/BattleLogGameMode'
+          $ref: '#/components/schemas/GameMode'
         deckSelection:
           type: string
         team:
           $ref: '#/components/schemas/BattleLogTeamList'
         opponent:
           $ref: '#/components/schemas/BattleLogTeamList'
-
-    BattleLogGameMode:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
 
     BattleLogTeam:
       type: object
@@ -1105,6 +1097,14 @@ components:
         clanChestPoints:
           type: integer
 
+    GameMode:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
     Location:
       type: object
       properties:
@@ -1282,28 +1282,34 @@ components:
     Tournament:
       type: object
       properties:
-          tag:
-            type: string
-          type:
-            type: string
-          status:
-            type: string
-          creatorTag:
-            type: string
-          name:
-            type: string
-          description:
-            type: string
-          capacity:
-            type: integer
-          maxCapacity:
-            type: integer
-          preparationDuration:
-            type: integer
-          duration:
-            type: integer
-          createdTime:
-            type: string
+        tag:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        levelCap:
+          type: integer
+        firstPlaceCardPrize:
+          type: integer
+        creatorTag:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        maxCapacity:
+          type: integer
+        preparationDuration:
+          type: integer
+        duration:
+          type: integer
+        createdTime:
+          type: string
+        gameMode:
+          $ref: '#/components/schemas/GameMode'
 
     TournamentPlayer:
       type: object
@@ -1319,22 +1325,21 @@ components:
         clan:
           $ref: '#/components/schemas/ClanBase'
 
-    TournamentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Tournament'
-
     TournamentSearchResult:
       type: object
       properties:
         items:
-          $ref: '#/components/schemas/TournamentList'
+          type: array
+          items:
+            $ref: '#/components/schemas/Tournament'
 
     TournamentDetail:
       type: object
       properties:
         items:
-          $ref: '#/components/schemas/TournamentList'
+          type: array
+          items:
+            $ref: '#/components/schemas/Tournament'
         startedTime:
           type: string
         membersList:
