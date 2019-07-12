@@ -260,7 +260,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CurrentWar'
+                $ref: '#/components/schemas/WarCurrent'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -330,7 +330,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpcomingChestsList'
+                $ref: '#/components/schemas/ChestList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -455,7 +455,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tournament'
+                $ref: '#/components/schemas/TournamentDetail'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -821,6 +821,7 @@ components:
       description: JSON Web Token used as an API key
       name: authorization
       in: header
+
   schemas:
     Error:
       type: object
@@ -829,6 +830,110 @@ components:
           type: string
         message:
           type: string
+
+    Arena:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    BattleLog:
+      type: array
+      items:
+        $ref: '#/components/schemas/BattleLogEntry'
+
+    BattleLogEntry:
+      type: object
+      properties:
+        type:
+          type: string
+        battleTime:
+          type: string
+        isLadderTournament:
+          type: boolean
+        arena:
+          $ref: '#/components/schemas/Arena'
+        gameMode:
+          $ref: '#/components/schemas/BattleLogGameMode'
+        deckSelection:
+          type: string
+        team:
+          $ref: '#/components/schemas/BattleLogTeamList'
+        opponent:
+          $ref: '#/components/schemas/BattleLogTeamList'
+
+    BattleLogGameMode:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    BattleLogTeam:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        startingTrophies:
+          type: integer
+        trophyChange:
+          type: integer
+        crowns:
+          type: integer
+        clan:
+          $ref: '#/components/schemas/ClanBase'
+        cards:
+          $ref: '#/components/schemas/CardList'
+
+    BattleLogTeamList:
+      type: array
+      items:
+        $ref: '#/components/schemas/BattleLogTeam'
+
+    Card:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        maxLevel:
+          type: integer
+        iconUrls:
+          type: object
+          properties:
+            medium:
+              type: string
+
+    CardList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+
+    Chest:
+      type: object
+      properties:
+        index:
+          type: integer
+        name:
+          type: string
+
+    ChestList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chest'
+
     ClanBase:
       type: object
       properties:
@@ -838,33 +943,7 @@ components:
           type: string
         badgeId:
           type: integer
-    SearchResultClan:
-      type: object
-      properties:
-        tag:
-          type: string
-        name:
-          type: string
-        badgeId:
-          type: integer
-        type:
-          type: string
-        clanScore:
-          type: integer
-        requiredTrophies:
-          type: integer
-        donationsPerWeek:
-          type: integer
-        clanWarTrophies:
-          type: integer
-        clanChestLevel:
-          type: integer
-        clanChestMaxLevel:
-          type: integer
-        members:
-          type: integer
-        location:
-          $ref: '#/components/schemas/Location'
+
     Clan:
       type: object
       properties:
@@ -902,7 +981,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClanMember'
-    WarStandingClan:
+
+    ClanMemberList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClanMember'
+
+    ClanRanked:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        rank:
+          type: integer
+        previousRank:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+        clanScore:
+          type: integer
+        badgeId:
+          type: integer
+        members:
+          type: integer
+
+    ClanRankingList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClanRanked'
+
+    ClanSearchResultClan:
       type: object
       properties:
         tag:
@@ -911,24 +1027,61 @@ components:
           type: string
         badgeId:
           type: integer
+        type:
+          type: string
         clanScore:
           type: integer
-        participants:
+        requiredTrophies:
           type: integer
-        battlesPlayed:
+        donationsPerWeek:
           type: integer
-        wins:
+        clanWarTrophies:
           type: integer
-        crowns:
+        clanChestLevel:
           type: integer
-    WarStanding:
+        clanChestMaxLevel:
+          type: integer
+        members:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+
+    ClanSearchResult:
       type: object
       properties:
-        clan:
-          type: object
-          $ref: '#/components/schemas/WarStandingClan'
-        trophyChange:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClanSearchResultClan'
+
+    ClanWarRanked:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        rank:
           type: integer
+        previousRank:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+        clanScore:
+          type: integer
+        badgeId:
+          type: integer
+        members:
+          type: integer
+
+    ClanWarsRankingList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClanWarRanked'
+
     ClanMember:
       type: object
       properties:
@@ -954,13 +1107,7 @@ components:
           type: integer
         clanChestPoints:
           type: integer
-    Arena:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
+
     Location:
       type: object
       properties:
@@ -972,112 +1119,15 @@ components:
           type: boolean
         countryCode:
           type: string
-    ClanSearchResult:
+
+    LocationList:
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/SearchResultClan'
-    ClanMemberList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClanMember'
-    WarParticipant:
-      type: object
-      properties:
-        tag:
-          type: string
-        name:
-          type: string
-        cardsEarned:
-          type: integer
-        battlesPlayed:
-          type: integer
-        collectionDayBattlesPlayed:
-          type: integer
-        wins:
-          type: integer
-    WarClan:
-      type: object
-      properties:
-        tag:
-          type: string
-        name:
-          type: string
-        badgeId:
-          type: string
-        clanScore:
-          type: integer
-        participants:
-          type: integer
-        crowns:
-          type: integer
-        battlesRemaining:
-          type: integer
-        battlesPlayed:
-          type: integer
-        wins:
-          type: integer
-    WarLog:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              seasonId:
-                type: integer
-              createdDate:
-                type: string
-              participants:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WarParticipant'
-              standings:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WarStanding'
-    CurrentWar:
-      type: object
-      properties:
-        state:
-          type: string
-        warEndTime:
-          type: string
-        collectionEndTime:
-          type: string
-        clan:
-          type: object
-          properties:
-            tag:
-              type: string
-            name:
-              type: string
-            badgeId:
-              type: integer
-            clanScore:
-              type: integer
-            participants:
-              type: integer
-            battlesPlayed:
-              type: integer
-            wins:
-              type: integer
-            crowns:
-              type: integer
-        participants:
-          type: array
-          items:
-            $ref: '#/components/schemas/WarParticipant'
-        clans:
-          type: array
-          items:
-            $ref: '#/components/schemas/WarClan'
+            $ref: '#/components/schemas/Location'
+
     SeasonStatistics:
       type: object
       properties:
@@ -1087,6 +1137,33 @@ components:
           type: integer
         bestTrophies:
           type: integer
+
+    PlayerAchievement:
+      type: object
+      properties:
+        name:
+          type: string
+        stars:
+          type: integer
+        value:
+          type: integer
+        target:
+          type: integer
+        info:
+          type: string
+
+    PlayerBadge:
+      type: object
+      properties:
+        name:
+          type: string
+        level:
+          type: integer
+        maxLevel:
+          type: integer
+        progress:
+          type: integer
+
     PlayerBase:
       type: object
       properties:
@@ -1100,9 +1177,20 @@ components:
           type: integer
         arena:
           $ref: '#/components/schemas/Arena'
+
     PlayerDetail:
       type: object
       properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
         bestTrophies:
           type: integer
         wins:
@@ -1142,11 +1230,20 @@ components:
         achievements:
           type: array
           items:
-            $ref: '#/components/schemas/PlayerAchievements'
+            $ref: '#/components/schemas/PlayerAchievement'
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerBadge'
         cards:
-          $ref: '#/components/schemas/CardList'
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
         currentFavouriteCard:
           $ref: '#/components/schemas/Card'
+        starPoints:
+          type: integer
+
     PlayerLeagueStatistics:
       type: object
       properties:
@@ -1156,228 +1253,205 @@ components:
           $ref: '#/components/schemas/SeasonStatistics'
         bestSeason:
           $ref: '#/components/schemas/SeasonStatistics'
-    PlayerAchievements:
-      type: object
-      properties:
-        name:
-          type: string
-        stars:
-          type: integer
-        value:
-          type: integer
-        target:
-          type: integer
-        info:
-          type: string
-    UpcomingChestsList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              index:
-                type: integer
-              name:
-                type: string
-    BattleLogTeam:
+
+    PlayerRanked:
       type: object
       properties:
         tag:
           type: string
         name:
           type: string
-        startingTrophies:
+        expLevel:
           type: integer
-        trophyChange:
+        trophies:
           type: integer
-        crowns:
+        rank:
+          type: integer
+        previousRank:
           type: integer
         clan:
           $ref: '#/components/schemas/ClanBase'
-        cards:
-          $ref: '#/components/schemas/CardList'
-    BattleLog:
-      type: array
-      items:
-        type: object
-        properties:
-          type:
-            type: string
-          battleTime:
-            type: string
-          arena:
-            $ref: '#/components/schemas/Arena'
-          gameMode:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-          deckSelection:
-            type: string
-          team:
-            type: array
-            items:
-              $ref: '#/components/schemas/BattleLogTeam'
-          opponent:
-            type: array
-            items:
-              $ref: '#/components/schemas/BattleLogTeam'
-    TournamentBase:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              tag:
-                type: string
-              type:
-                type: string
-              status:
-                type: string
-              creatorTag:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              capacity:
-                type: integer
-              maxCapacity:
-                type: integer
-              preparationDuration:
-                type: integer
-              duration:
-                type: integer
-              createdTime:
-                type: string
-    TournamentSearchResult:
-      allOf:
-        - $ref: '#/components/schemas/TournamentBase'
-    Tournament:
-      allOf:
-        - $ref: '#/components/schemas/TournamentBase'
-        - type: object
-          properties:
-            startedTime:
-              type: string
-            membersList:
-              type: array
-              items:
-                type: object
-                properties:
-                  tag:
-                    type: string
-                  name:
-                    type: string
-                  score:
-                    type: integer
-                  rank:
-                    type: integer
-                  clan:
-                    $ref: '#/components/schemas/ClanBase'
-    Card:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: integer
-        maxLevel:
-          type: integer
-        iconUrls:
-          type: object
-          properties:
-            medium:
-              type: string
-    CardList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Card'
-    LocationList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Location'
-    ClanRankingList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            properties:
-              tag:
-                type: string
-              name:
-                type: string
-              rank:
-                type: integer
-              previousRank:
-                type: integer
-              location:
-                $ref: '#/components/schemas/Location'
-              clanScore:
-                type: integer
-              badgeId:
-                type: integer
-              members:
-                type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
+
     PlayerRankingList:
       type: object
       properties:
         items:
           type: array
           items:
-            type: object
-            properties:
-              tag:
-                type: string
-              name:
-                type: string
-              expLevel:
-                type: integer
-              trophies:
-                type: integer
-              rank:
-                type: integer
-              previousRank:
-                type: integer
-              clan:
-                $ref: '#/components/schemas/ClanBase'
-              arena:
-                $ref: '#/components/schemas/Arena'
-    ClanWarsRankingList:
+            $ref: '#/components/schemas/PlayerRanked'
+
+    Tournament:
+      type: object
+      properties:
+          tag:
+            type: string
+          type:
+            type: string
+          status:
+            type: string
+          creatorTag:
+            type: string
+          name:
+            type: string
+          description:
+            type: string
+          capacity:
+            type: integer
+          maxCapacity:
+            type: integer
+          preparationDuration:
+            type: integer
+          duration:
+            type: integer
+          createdTime:
+            type: string
+
+    TournamentPlayer:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        score:
+          type: integer
+        rank:
+          type: integer
+        clan:
+          $ref: '#/components/schemas/ClanBase'
+
+    TournamentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tournament'
+
+    TournamentSearchResult:
+      type: object
+      properties:
+        items:
+          $ref: '#/components/schemas/TournamentList'
+
+    TournamentDetail:
+      type: object
+      properties:
+        items:
+          $ref: '#/components/schemas/TournamentList'
+        startedTime:
+          type: string
+        membersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TournamentPlayer'
+
+    War:
+      type: object
+      properties:
+        seasonId:
+          type: integer
+        createdDate:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarParticipant'
+        standings:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarStanding'
+
+    WarClan:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: string
+        clanScore:
+          type: integer
+        participants:
+          type: integer
+        crowns:
+          type: integer
+        battlesRemaining:
+          type: integer
+        battlesPlayed:
+          type: integer
+        wins:
+          type: integer
+
+    WarCurrent:
+      type: object
+      properties:
+        state:
+          type: string
+        warEndTime:
+          type: string
+        collectionEndTime:
+          type: string
+        clan:
+            $ref: '#/components/schemas/WarClan'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarParticipant'
+        clans:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarClan'
+
+    WarLog:
       type: object
       properties:
         items:
           type: array
           items:
-            type: object
-            properties:
-              tag:
-                type: string
-              name:
-                type: string
-              rank:
-                type: integer
-              previousRank:
-                type: integer
-              location:
-                $ref: '#/components/schemas/Location'
-              clanScore:
-                type: integer
-              badgeId:
-                type: integer
-              members:
-                type: integer
+            $ref: '#/components/schemas/War'
+
+    WarParticipant:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        cardsEarned:
+          type: integer
+        battlesPlayed:
+          type: integer
+        collectionDayBattlesPlayed:
+          type: integer
+        wins:
+          type: integer
+
+    WarStandingClan:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        clanScore:
+          type: integer
+        participants:
+          type: integer
+        battlesPlayed:
+          type: integer
+        wins:
+          type: integer
+        crowns:
+          type: integer
+
+    WarStanding:
+      type: object
+      properties:
+        clan:
+          type: object
+          $ref: '#/components/schemas/WarStandingClan'
+        trophyChange:
+          type: integer
