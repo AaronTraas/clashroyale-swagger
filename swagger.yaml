@@ -857,9 +857,13 @@ components:
         deckSelection:
           type: string
         team:
-          $ref: '#/components/schemas/BattleLogTeamList'
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleLogTeam'
         opponent:
-          $ref: '#/components/schemas/BattleLogTeamList'
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleLogTeam'
 
     BattleLogTeam:
       type: object
@@ -878,11 +882,6 @@ components:
           $ref: '#/components/schemas/ClanBase'
         cards:
           $ref: '#/components/schemas/CardList'
-
-    BattleLogTeamList:
-      type: array
-      items:
-        $ref: '#/components/schemas/BattleLogTeam'
 
     Card:
       type: object
