@@ -977,6 +977,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClanMember'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     ClanRanked:
       type: object
@@ -1084,6 +1086,8 @@ components:
         arena:
           $ref: '#/components/schemas/Arena'
         role:
+          type: string
+        lastSeen:
           type: string
         clanRank:
           type: integer
@@ -1278,6 +1282,17 @@ components:
           items:
             $ref: '#/components/schemas/PlayerRanked'
 
+    SearchPaging:
+      type: object
+      properties:
+        cursors:
+          type: object
+          properties:
+            after:
+              type: string
+            before:
+              type: string
+
     Tournament:
       type: object
       properties:
@@ -1331,6 +1346,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Tournament'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     TournamentDetail:
       type: object
