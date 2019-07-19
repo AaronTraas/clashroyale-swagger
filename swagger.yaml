@@ -1335,10 +1335,34 @@ components:
     TournamentDetail:
       type: object
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tournament'
+        tag:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        levelCap:
+          type: integer
+        firstPlaceCardPrize:
+          type: integer
+        creatorTag:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        maxCapacity:
+          type: integer
+        preparationDuration:
+          type: integer
+        duration:
+          type: integer
+        createdTime:
+          type: string
+        gameMode:
+          $ref: '#/components/schemas/GameMode'
         startedTime:
           type: string
         membersList:
