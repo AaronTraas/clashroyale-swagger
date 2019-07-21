@@ -4,6 +4,9 @@ info:
   title: Clash Royale API
   description: Unofficial Swagger definition for the official Clash Royale API
   termsOfService: http://supercell.com/en/terms-of-service/
+  license:
+    name: GNU Lesser General Public License 3.0
+    url: https://www.gnu.org/licenses/lgpl-3.0.html
 tags:
   - name: clans
   - name: players
