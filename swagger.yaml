@@ -1007,6 +1007,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClanRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     ClanSearchResultClan:
       type: object
@@ -1043,6 +1045,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClanSearchResultClan'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     ClanWarRanked:
       type: object
@@ -1411,7 +1415,7 @@ components:
         name:
           type: string
         badgeId:
-          type: string
+          type: integer
         clanScore:
           type: integer
         participants:
@@ -1452,6 +1456,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/War'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     WarParticipant:
       type: object
@@ -1467,6 +1473,8 @@ components:
         collectionDayBattlesPlayed:
           type: integer
         wins:
+          type: integer
+        numberOfBattles:
           type: integer
 
     WarStandingClan:
