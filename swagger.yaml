@@ -1078,6 +1078,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClanWarRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     ClanMember:
       type: object
@@ -1124,8 +1126,6 @@ components:
           type: string
         isCountry:
           type: boolean
-        countryCode:
-          type: string
 
     LocationList:
       type: object
@@ -1134,6 +1134,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Location'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     SeasonStatistics:
       type: object
@@ -1288,6 +1290,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlayerRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
 
     SearchPaging:
       type: object
