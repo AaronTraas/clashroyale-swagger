@@ -881,10 +881,18 @@ components:
           type: integer
         crowns:
           type: integer
+        kingTowerHitPoints:
+          type: integer
+        princessTowersHitPoints:
+          type: array
+          items:
+            type: integer
         clan:
           $ref: '#/components/schemas/ClanBase'
         cards:
-          $ref: '#/components/schemas/CardList'
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
 
     Card:
       type: object
@@ -892,6 +900,10 @@ components:
         name:
           type: string
         id:
+          type: integer
+        level:
+          type: integer
+        count:
           type: integer
         maxLevel:
           type: integer
