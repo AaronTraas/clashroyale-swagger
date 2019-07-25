@@ -1138,6 +1138,8 @@ components:
           type: string
         isCountry:
           type: boolean
+        countryCode:
+          type: string
 
     LocationList:
       type: object
