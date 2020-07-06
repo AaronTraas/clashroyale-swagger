@@ -1,5 +1,7 @@
 # Swagger definition for the https://api.brawlstars.com/v1
 
+forked from AaronTraas/clashroyale-swagger
+
 This aims to be a complete swagger mapping of the Official [Brawl Stars Developer API](https://developer.brawlstars.com)
 
 Work in progress
