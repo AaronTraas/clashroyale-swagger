@@ -1,0 +1,1528 @@
+openapi: 3.0.0
+info:
+  version: "1.0"
+  title: Clash Royale API
+  description: Unofficial Swagger definition for the official Clash Royale API
+  termsOfService: http://supercell.com/en/terms-of-service/
+  license:
+    name: GNU Lesser General Public License 3.0
+    url: https://www.gnu.org/licenses/lgpl-3.0.html
+tags:
+  - name: clubs
+  - name: players
+  - name: tournaments
+  - name: cards
+  - name: locations
+paths:
+  /clubs:
+    get:
+      summary: Search clubs
+      description: >
+        Search all clubs by name and/or filtering the results using various criteria. At least one filtering criteria must be defined and if name is used as part of search, it is required to be at least three characters long.
+
+        It is not possible to specify ordering for results so clients should not rely on any specific ordering as that may change in the future releases of the API.
+      tags:
+        - clubs
+      operationId: searchClubs
+      parameters:
+        - name: name
+          in: query
+          description: >
+            Search clubs by name. If name is used as part of search query, it needs to be at least three characters long. Name search parameter is interpreted as wild card search, so it may appear anywhere in the Club name.
+          required: false
+          schema:
+            type: string
+            minLength: 3
+        - name: locationId
+          in: query
+          description: >
+            Filter by Club location identifier. For list of available locations, refer to getLocations operation.
+          required: false
+          schema:
+            type: integer
+        - name: minMembers
+          in: query
+          description: |
+            Filter by minimum amount of Club members.
+          required: false
+          schema:
+            type: integer
+        - name: maxMembers
+          in: query
+          description: |
+            Filter by maximum amount of Club members.
+          required: false
+          schema:
+            type: integer
+        - name: minScore
+          in: query
+          description: |
+            Filter by minimum amount of Club score.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from theresponse, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClubSearchResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/clubs/{clubTag}':
+    get:
+      summary: Get Club information
+      description: >
+        Get information about a single Club by Club tag. Club tags can be found using Club search operation.
+
+        Note that Club tags start with hash character '#' and that needs to be URL-encoded properly to work in URL, so for example Club tag '#2ABC' would become '%232ABC' in the URL.
+      tags:
+        - clubs
+      operationId: getClub
+      parameters:
+        - name: clubTag
+          in: path
+          description: Tag of the Club to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/clubs/{clubTag}/members':
+    get:
+      summary: List Club members
+      description: List Club members
+      tags:
+        - clubs
+      operationId: getClubMembers
+      parameters:
+        - name: clubTag
+          in: path
+          description: Tag of the Club whose members to retrieve.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClubMemberList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/clubs/{clubTag}/warlog':
+    get:
+      summary: Retrieve Club's Club war log
+      description: Retrieve Club's Club war log
+      tags:
+        - clubs
+      operationId: getClubWarLog
+      parameters:
+        - name: clubTag
+          in: path
+          description: Tag of the Club whose war log to retrieve.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/clubs/{clubTag}/currentwar':
+    get:
+      summary: Information about Club's current Club war
+      description: Retrieve information about Club's current Club war
+      tags:
+        - clubs
+      operationId: getCurrentWar
+      parameters:
+        - name: clubTag
+          in: path
+          description: Tag of the Club whose war log to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarCurrent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/players/{playerTag}':
+    get:
+      summary: Get player information
+      description: >
+        Get information about a single player by player tag. Player tags can befound either in game or by from Club member lists.
+
+        Note that player tags start with hash character '#' and that needs to be URL-encoded properly to work in URL, so for example player tag '#2ABC' would become '%232ABC' in the URL.
+      tags:
+        - players
+      operationId: getPlayer
+      parameters:
+        - name: playerTag
+          in: path
+          description: |
+            Tag of the player to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/players/{playerTag}/upcomingchests':
+    get:
+      summary: Get information about player's upcoming chests
+      description: |
+        Get list of reward chests that the player will receive next in the game.
+      tags:
+        - players
+      operationId: getPlayerUpcomingChests
+      parameters:
+        - name: playerTag
+          in: path
+          description: |
+            Tag of the player whose information to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChestList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/players/{playerTag}/battlelog':
+    get:
+      summary: Get log of recent battles for a player
+      description: |
+        Get list of recent battle results for a player.
+      tags:
+        - players
+      operationId: getPlayerBattles
+      parameters:
+        - name: playerTag
+          in: path
+          description: |
+            Tag of the player whose information to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BattleLogEntry'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  /tournaments:
+    get:
+      summary: Search tournaments
+      description: >
+        Search all tournaments by name.
+
+        It is not possible to specify ordering for results so clients should not rely on any specific ordering as that may change in the future releases of the API.
+      tags:
+        - tournaments
+      operationId: searchTournaments
+      parameters:
+        - name: name
+          in: query
+          description: |
+            Search tournaments by name.
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentSearchResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/tournaments/{tournamentTag}':
+    get:
+      summary: Get tournament information
+      description: |
+        Get information about a single tournament by a tournament tag.
+      tags:
+        - tournaments
+      operationId: getTournament
+      parameters:
+        - name: tournamentTag
+          in: path
+          description: |
+            Tag of the tournament to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  /globaltournaments:
+    get:
+      summary: List global tournaments
+      description: List all available global tournaments.
+      tags:
+        - tournaments
+      operationId: getGlobalTournaments
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentSearchResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+
+  /cards:
+    get:
+      summary: Get list of available cards
+      description: |
+        Get list of all available cards.
+      tags:
+        - cards
+      operationId: getCards
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  /locations:
+    get:
+      summary: List locations
+      description: List all available locations
+      tags:
+        - locations
+      operationId: getLocations
+      parameters:
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/locations/{locationId}':
+    get:
+      summary: Get location information
+      description: Get information about specific location
+      tags:
+        - locations
+      operationId: getLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: Identifier of the location to retrieve.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/locations/{locationId}/rankings/clubs':
+    get:
+      summary: Get Club rankings for a specific location
+      description: Get Club rankings for a specific location
+      tags:
+        - locations
+      operationId: getClubRanking
+      parameters:
+        - name: locationId
+          in: path
+          description: Identifier of the location to retrieve.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be
+            found from the
+            response, inside the 'paging' property. Note that only after or
+            before can be specified for a
+            request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClubRankingList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/locations/{locationId}/rankings/players':
+    get:
+      summary: Get player rankings for a specific location
+      description: Get player rankings for a specific location
+      tags:
+        - locations
+      operationId: getPlayerRanking
+      parameters:
+        - name: locationId
+          in: path
+          description: Identifier of the location to retrieve.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerRankingList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/locations/{locationId}/rankings/clubwars':
+    get:
+      summary: Get Club war rankings for a specific location
+      description: Get Club war rankings for a specific location
+      tags:
+        - locations
+      operationId: getClubWarsRanking
+      parameters:
+        - name: locationId
+          in: path
+          description: Identifier of the location to retrieve.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: |
+            Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClubWarsRankingList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+security:
+  - JWT: []
+servers:
+  - url: 'https://api.clashroyale.com/v1'
+components:
+  responses:
+    BadRequest:
+      description: Client provided incorrect parameters for the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: >
+        Access denied, either because of missing/incorrect credentials or used API token does not grant access to the requested resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RequestThrottled:
+      description: >
+        Request was throttled, because amount of requests was above the threshold defined for the used API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnknownException:
+      description: |
+        Unknown error happened when handling the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InMaintenance:
+      description: |
+        Service is temprorarily unavailable because of maintenance.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: JSON Web Token used as an API key
+      name: authorization
+      in: header
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        reason:
+          type: string
+        message:
+          type: string
+
+    Arena:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    BattleLogEntry:
+      type: object
+      properties:
+        type:
+          type: string
+        battleTime:
+          type: string
+        isLadderTournament:
+          type: boolean
+        arena:
+          $ref: '#/components/schemas/Arena'
+        gameMode:
+          $ref: '#/components/schemas/GameMode'
+        deckSelection:
+          type: string
+        team:
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleLogTeam'
+        opponent:
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleLogTeam'
+
+    BattleLogTeam:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        startingTrophies:
+          type: integer
+        trophyChange:
+          type: integer
+        crowns:
+          type: integer
+        kingTowerHitPoints:
+          type: integer
+        princessTowersHitPoints:
+          type: array
+          items:
+            type: integer
+        Club:
+          $ref: '#/components/schemas/ClubBase'
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+
+    Card:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        level:
+          type: integer
+        count:
+          type: integer
+        maxLevel:
+          type: integer
+        iconUrls:
+          type: object
+          properties:
+            medium:
+              type: string
+
+    CardList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+
+    Chest:
+      type: object
+      properties:
+        index:
+          type: integer
+        name:
+          type: string
+
+    ChestList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chest'
+
+    ClubBase:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+
+    Club:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        type:
+          type: string
+        clubScore:
+          type: integer
+        requiredTrophies:
+          type: integer
+        donationsPerWeek:
+          type: integer
+        clubWarTrophies:
+          type: integer
+        clubChestLevel:
+          type: integer
+        clubChestMaxLevel:
+          type: integer
+        members:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+        description:
+          type: string
+        clubChestStatus:
+          type: string
+        clubChestPoints:
+          type: integer
+        memberList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubMember'
+
+    ClubMemberList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubMember'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    ClubRanked:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        rank:
+          type: integer
+        previousRank:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+        clubScore:
+          type: integer
+        badgeId:
+          type: integer
+        members:
+          type: integer
+
+    ClubRankingList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    ClubSearchResultClub:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        type:
+          type: string
+        clubScore:
+          type: integer
+        requiredTrophies:
+          type: integer
+        donationsPerWeek:
+          type: integer
+        clubWarTrophies:
+          type: integer
+        clubChestLevel:
+          type: integer
+        clubChestMaxLevel:
+          type: integer
+        members:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+
+    ClubSearchResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubSearchResultClub'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    ClubWarRanked:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        rank:
+          type: integer
+        previousRank:
+          type: integer
+        location:
+          $ref: '#/components/schemas/Location'
+        clubScore:
+          type: integer
+        badgeId:
+          type: integer
+        members:
+          type: integer
+
+    ClubWarsRankingList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClubWarRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    ClubMember:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
+        role:
+          type: string
+        lastSeen:
+          type: string
+        clubRank:
+          type: integer
+        previousClubRank:
+          type: integer
+        donations:
+          type: integer
+        donationsReceived:
+          type: integer
+        clubChestPoints:
+          type: integer
+
+    GameMode:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        isCountry:
+          type: boolean
+        countryCode:
+          type: string
+
+    LocationList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    SeasonStatistics:
+      type: object
+      properties:
+        id:
+          type: string
+        trophies:
+          type: integer
+        bestTrophies:
+          type: integer
+
+    PlayerAchievement:
+      type: object
+      properties:
+        name:
+          type: string
+        stars:
+          type: integer
+        value:
+          type: integer
+        target:
+          type: integer
+        info:
+          type: string
+
+    PlayerBadge:
+      type: object
+      properties:
+        name:
+          type: string
+        level:
+          type: integer
+        maxLevel:
+          type: integer
+        progress:
+          type: integer
+
+    PlayerBase:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
+
+    PlayerDetail:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        arena:
+          $ref: '#/components/schemas/Arena'
+        bestTrophies:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        battleCount:
+          type: integer
+        threeCrownWins:
+          type: integer
+        challengeCardsWon:
+          type: integer
+        challengeMaxWins:
+          type: integer
+        tournamentCardsWon:
+          type: integer
+        tournamentBattleCount:
+          type: integer
+        role:
+          type: string
+        donations:
+          type: integer
+        donationsReceived:
+          type: integer
+        totalDonations:
+          type: integer
+        warDayWins:
+          type: integer
+        clubCardsCollected:
+          type: integer
+        Club:
+          $ref: '#/components/schemas/ClubBase'
+        arena:
+          $ref: '#/components/schemas/Arena'
+        leagueStatistics:
+          $ref: '#/components/schemas/PlayerLeagueStatistics'
+        achievements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerAchievement'
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerBadge'
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+        currentFavouriteCard:
+          $ref: '#/components/schemas/Card'
+        starPoints:
+          type: integer
+
+    PlayerLeagueStatistics:
+      type: object
+      properties:
+        currentSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+        previousSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+        bestSeason:
+          $ref: '#/components/schemas/SeasonStatistics'
+
+    PlayerRanked:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        expLevel:
+          type: integer
+        trophies:
+          type: integer
+        rank:
+          type: integer
+        previousRank:
+          type: integer
+        Club:
+          $ref: '#/components/schemas/ClubBase'
+        arena:
+          $ref: '#/components/schemas/Arena'
+
+    PlayerRankingList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerRanked'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    SearchPaging:
+      type: object
+      properties:
+        cursors:
+          type: object
+          properties:
+            after:
+              type: string
+            before:
+              type: string
+
+    Tournament:
+      type: object
+      properties:
+        tag:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        levelCap:
+          type: integer
+        firstPlaceCardPrize:
+          type: integer
+        creatorTag:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        maxCapacity:
+          type: integer
+        preparationDuration:
+          type: integer
+        duration:
+          type: integer
+        createdTime:
+          type: string
+        gameMode:
+          $ref: '#/components/schemas/GameMode'
+
+    TournamentPlayer:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        score:
+          type: integer
+        rank:
+          type: integer
+        Club:
+          $ref: '#/components/schemas/ClubBase'
+
+    TournamentSearchResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tournament'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    TournamentDetail:
+      type: object
+      properties:
+        tag:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        levelCap:
+          type: integer
+        firstPlaceCardPrize:
+          type: integer
+        creatorTag:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        maxCapacity:
+          type: integer
+        preparationDuration:
+          type: integer
+        duration:
+          type: integer
+        createdTime:
+          type: string
+        gameMode:
+          $ref: '#/components/schemas/GameMode'
+        startedTime:
+          type: string
+        membersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TournamentPlayer'
+
+    War:
+      type: object
+      properties:
+        seasonId:
+          type: integer
+        createdDate:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarParticipant'
+        standings:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarStanding'
+
+    WarClub:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        clubScore:
+          type: integer
+        participants:
+          type: integer
+        crowns:
+          type: integer
+        battlesRemaining:
+          type: integer
+        battlesPlayed:
+          type: integer
+        wins:
+          type: integer
+
+    WarCurrent:
+      type: object
+      properties:
+        state:
+          type: string
+        warEndTime:
+          type: string
+        collectionEndTime:
+          type: string
+        Club:
+            $ref: '#/components/schemas/WarClub'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarParticipant'
+        clubs:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarClub'
+
+    WarLog:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/War'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    WarParticipant:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        cardsEarned:
+          type: integer
+        battlesPlayed:
+          type: integer
+        collectionDayBattlesPlayed:
+          type: integer
+        wins:
+          type: integer
+        numberOfBattles:
+          type: integer
+
+    WarStandingClub:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        clubScore:
+          type: integer
+        participants:
+          type: integer
+        battlesPlayed:
+          type: integer
+        wins:
+          type: integer
+        crowns:
+          type: integer
+
+    WarStanding:
+      type: object
+      properties:
+        Club:
+          type: object
+          $ref: '#/components/schemas/WarStandingClub'
+        trophyChange:
+          type: integer
