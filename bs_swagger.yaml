@@ -1,13 +1,13 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
-  version: "1.0"
+  version: "1.0.0"
   title: Brawl Stars API
   description: Unofficial Swagger definition for the official Brawl Stars API
   termsOfService: http://supercell.com/en/terms-of-service/
   license:
     name: GNU Lesser General Public License 3.0
     url: https://www.gnu.org/licenses/lgpl-3.0.html
-basePath: "/v1"
+
 tags:
   - name: players
     description: "Fetch Player information"
@@ -16,9 +16,8 @@ tags:
   - name: rankings
     description: "Fetch Ranking information"
   - name: brawlers
-    description: "Fetch brawler information"
-schemes:
-  - "https"
+    description: "Fetch Brawler information"
+
 paths:
   '/players/{PlayerTag}':
    get:
@@ -54,7 +53,9 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-  'get /players/{playerTag}/battlelog':
+
+paths:
+  '/players/{playerTag}/battlelog':
    get:
       summary: Get player's battlelog
       description: Get information about a single player's battlelog
@@ -182,6 +183,15 @@ components:
           items:
             $ref: '#/components/schemas/Brawler'
 
+    ClubBase:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+
     Brawler:
       type: object
       properties:
@@ -278,7 +288,7 @@ components:
           items:
             $ref: "#/components/schemas/Players"
 
-  Players:
+    Players:
       type: object
       properties:
         tag:
@@ -290,7 +300,7 @@ components:
           items:
            $ref: "#/components/schemas/BattleBrawler"
 
-  BattleBrawler:
+    BattleBrawler:
       type: object
       properties:
         id:

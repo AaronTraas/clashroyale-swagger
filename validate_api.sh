@@ -1,1 +1,1 @@
-openapi-generator validate -i bs_swagger.yaml
+openapi-spec-validator bs_swagger.yaml
