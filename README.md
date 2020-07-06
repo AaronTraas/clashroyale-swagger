@@ -2,6 +2,8 @@
 
 This aims to be a complete swagger mapping of the Official [Brawl Stars Developer API](https://developer.brawlstars.com)
 
+Work in progress
+
 ## Notes
 
 ### The developer documentation on api.brawlstars.com is wrong or out of date
