@@ -1,10 +1,10 @@
-# Swagger definition for the https://api.clashroyale.com/v1
+# Swagger definition for the https://api.brawlstars.com/v1
 
-This aims to be a complete swagger mapping of the Official [Clash Royale Developer API](https://developer.clashroyale.com)
+This aims to be a complete swagger mapping of the Official [Brawl Stars Developer API](https://developer.brawlstars.com)
 
 ## Notes
 
-### The developer documentation on api.clashroyale.com is wrong or out of date
+### The developer documentation on api.brawlstars.com is wrong or out of date
 
 There are many cases where the models and example return types on the official developer documentation are incorrect.
 
@@ -15,4 +15,6 @@ I'm not making much use of model inheritance. That's because the code generation
 # Known implementations:
 
 - Python:
-	- pyroyale: https://github.com/AaronTraas/pyroyale
+	- pyroyale: https://github.com/heyudude/pybrawl
+	
+	forked from AaronTraas/clashroyale-swagger
