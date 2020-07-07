@@ -1,27 +1,24 @@
 openapi: 3.0.0
-servers:
-  - url: 'https://api.brawlstars.com/v1'
 info:
-  description: >-
-    Unofficial Swagger definition for the official Brawl Stars API
-  version: 1.0.0
+  version: "1.0"
   title: Brawl Stars API
+  description: Unofficial Swagger definition for the official Brawl Stars API
   termsOfService: http://supercell.com/en/terms-of-service/
   license:
     name: GNU Lesser General Public License 3.0
     url: https://www.gnu.org/licenses/lgpl-3.0.html
+basePath: "/v1"
 tags:
   - name: players
-    description: Fetch player information
+    description: "Fetch Player information"
   - name: clubs
-    description: Fetch club information
+    description: "Fetch Club information"
   - name: rankings
-    description: Fetch ranking information
+    description: "Fetch Ranking information"
   - name: brawlers
-    description: Fetch brawler information
-    externalDocs:
-      description: Find out more
-      url: 'http://swagger.io'
+    description: "Fetch brawler information"
+schemes:
+  - "https"
 paths:
   '/players/{PlayerTag}':
    get:
@@ -57,8 +54,7 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-
-  '/players/{playerTag}/battlelog':
+  'get /players/{playerTag}/battlelog':
    get:
       summary: Get player's battlelog
       description: Get information about a single player's battlelog
@@ -92,6 +88,8 @@ paths:
           $ref: '#/components/responses/InMaintenance'
 security:
   - JWT: []
+servers:
+  - url: 'https://api.brawlstars.com/v1'
 components:
   responses:
     BadRequest:
@@ -183,14 +181,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Brawler'
-
-    ClubBase:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
 
     Brawler:
       type: object
@@ -288,7 +278,7 @@ components:
           items:
             $ref: "#/components/schemas/Players"
 
-    Players:
+  Players:
       type: object
       properties:
         tag:
@@ -300,7 +290,7 @@ components:
           items:
            $ref: "#/components/schemas/BattleBrawler"
 
-    BattleBrawler:
+  BattleBrawler:
       type: object
       properties:
         id:
