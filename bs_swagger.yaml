@@ -23,7 +23,7 @@ tags:
       description: Find out more
       url: 'http://swagger.io'
 paths:
-  '/players/{PlayerTag}':
+  '/players/{playerTag}':
    get:
       summary: Get player information
       description: >
