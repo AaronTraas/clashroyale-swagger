@@ -19,9 +19,7 @@ tags:
     description: Fetch ranking information
   - name: brawlers
     description: Fetch brawler information
-    externalDocs:
-      description: Find out more
-      url: 'http://swagger.io'
+
 paths:
   '/players/{playerTag}':
    get:
@@ -243,7 +241,7 @@ components:
     PlayerBattleLog:
       type: object
       properties:
-        battle:
+        items:
           type: array
           items:
             $ref: '#/components/schemas/Battles'
@@ -279,16 +277,45 @@ components:
           type: string
         type:
           type: string
-        rank:
+        result:
+          type: string
+        duration:
           type: integer
         trophyChange:
           type: integer
-        players:
+        starPlayer:
           type: array
           items:
-            $ref: "#/components/schemas/Players"
+            $ref:  "#/components/schemas/starPlayer"
+        teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/teams"
 
-    Players:
+    starPlayer:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        brawler:
+          type: array
+          $ref:  "#/components/schemas/starBrawler"
+
+    starBrawler:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        power:
+          type: integer
+        trophies:
+          type: integer
+
+    teams:
       type: object
       properties:
         tag:
