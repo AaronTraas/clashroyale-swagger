@@ -19,6 +19,6 @@ I'm not making much use of model inheritance. That's because the code generation
 # Known implementations:
 
 - Python:
-	- pyroyale: https://github.com/heyudude/pybrawl
+	- pybrawl: https://github.com/heyudude/pybrawl
 	
 	forked from AaronTraas/clashroyale-swagger
