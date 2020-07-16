@@ -1,0 +1,7 @@
+generatorName: python
+outputDir: .
+inputSpec: bs_swagger.yaml
+templateDir: python
+additionalProperties:
+  packageName: pybrawl
+
