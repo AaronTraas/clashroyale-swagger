@@ -147,6 +147,8 @@ components:
           type: string
         message:
           type: string
+        detail:
+          type: string
 
     PlayerDetail:
       type: object
@@ -155,17 +157,23 @@ components:
           type: string
         name:
           type: string
+        nameColor:
+          type: string
+        icon:
+          type: string
         trophies:
+          type: integer
+        highestTrophies:
+          type: integer
+        highestPowerPlayPoints:
           type: integer
         expLevel:
           type: integer
         expPoints:
           type: integer
-        highestTrophies:
-          type: integer
-        powerPlayPoints:
-          type: integer
-        highestPowerPlayPoints:
+        isQualifiedFromChampionshipChallenge:
+          type: boolean
+        3vs3Victories:
           type: integer
         soloVictories:
           type: integer
@@ -185,8 +193,8 @@ components:
     ClubBase:
       type: object
       properties:
-        id:
-          type: integer
+        tag:
+          type: string
         name:
           type: string
 
@@ -244,9 +252,9 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Battles'
+            $ref: "#/components/schemas/Battle"
 
-    Battles:
+    Battle:
       type: object
       properties:
         battleTime:
@@ -254,9 +262,13 @@ components:
         event:
           type: array
           items:
-            $ref: "#/components/schemas/Event"
-
-    Event:
+            $ref: "#/components/schemas/Events"
+        battle:
+          type: array
+          items:
+            $ref: "#/components/schemas/Battles"
+            
+    Events:
       type: object
       properties:
         id:
@@ -265,57 +277,24 @@ components:
           type: string
         map:
           type: string
-        battle:
-          type: array
-          items:
-            $ref: "#/components/schemas/Battle"
 
-    Battle:
+    Battles:
       type: object
       properties:
         mode:
           type: string
         type:
           type: string
-        result:
-          type: string
-        duration:
+        rank:
           type: integer
         trophyChange:
           type: integer
-        starPlayer:
+        players:
           type: array
           items:
-            $ref:  "#/components/schemas/starPlayer"
-        teams:
-          type: array
-          items:
-            $ref: "#/components/schemas/teams"
+            $ref: "#/components/schemas/battlePlayers"
 
-    starPlayer:
-      type: object
-      properties:
-        tag:
-          type: string
-        name:
-          type: string
-        brawler:
-          type: array
-          $ref:  "#/components/schemas/starBrawler"
-
-    starBrawler:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        power:
-          type: integer
-        trophies:
-          type: integer
-
-    teams:
+    battlePlayers:
       type: object
       properties:
         tag:
@@ -325,13 +304,13 @@ components:
         brawler:
           type: array
           items:
-           $ref: "#/components/schemas/BattleBrawler"
+            $ref: "#/components/schemas/battleBrawlers"
 
-    BattleBrawler:
+    battleBrawlers:
       type: object
       properties:
         id:
-          type: string
+          type: integer
         name:
           type: string
         power:
