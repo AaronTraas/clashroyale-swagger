@@ -190,17 +190,17 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-  '/clans/{clanTag}/warlog':
+  '/clans/{clanTag}/riverracelog':
     get:
-      summary: Retrieve clan's clan war log
-      description: Retrieve clan's clan war log
+      summary: Retrieve clan's river race log
+      description: Retrieve clan's river race log
       tags:
         - clans
-      operationId: getClanWarLog
+      operationId: getClanRiverRaceLog
       parameters:
         - name: clanTag
           in: path
-          description: Tag of the clan whose war log to retrieve.
+          description: Tag of the clan whose river race log to retrieve.
           required: true
           schema:
             type: string
@@ -230,7 +230,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WarLog'
+                $ref: '#/components/schemas/RiverRaceLog'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -243,17 +243,17 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-  '/clans/{clanTag}/currentwar':
+  '/clans/{clanTag}/currentriverrace':
     get:
-      summary: Information about clan's current clan war
-      description: Retrieve information about clan's current clan war
+      summary: Information about clan's current river race
+      description: Retrieve information about clan's current river race
       tags:
         - clans
-      operationId: getCurrentWar
+      operationId: getCurrentRiverRace
       parameters:
         - name: clanTag
           in: path
-          description: Tag of the clan whose war log to retrieve.
+          description: Tag of the clan whose river race log to retrieve.
           required: true
           schema:
             type: string
@@ -263,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WarCurrent'
+                $ref: '#/components/schemas/RiverRaceCurrent'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
