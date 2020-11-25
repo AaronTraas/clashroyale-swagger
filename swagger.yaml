@@ -276,6 +276,92 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
+  '/clans/{clanTag}/currentriverrace':
+    get:
+      summary: Retrieve information about clan's current river race
+      description: Retrieve information about clan's current river race
+      tags:
+        - clans
+      operationId: getCurrentRiverRace
+      parameters:
+        - name: clanTag
+          in: path
+          description: Tag of the clan.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiverRace'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
+  '/clans/{clanTag}/riverracelog':
+    get:
+      summary: Retrieve clan's river race log
+      description: Retrieve clan's river race log
+      tags:
+        - clans
+      operationId: getClanRiverRaceLog
+      parameters:
+        - name: clanTag
+          in: path
+          description: Tag of the clan.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit the number of items returned in the response.
+          required: false
+          schema:
+            type: integer
+        - name: after
+          in: query
+          description: >
+            Return only items that occur after this marker. After marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+        - name: before
+          in: query
+          description: >
+            Return only items that occur before this marker. Before marker can be found from the response, inside the 'paging' property. Note that only after or before can be specified for a request, not both.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiverRaceLog'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RequestThrottled'
+        '500':
+          $ref: '#/components/responses/UnknownException'
+        '503':
+          $ref: '#/components/responses/InMaintenance'
   '/players/{playerTag}':
     get:
       summary: Get player information
@@ -1306,6 +1392,99 @@ components:
             $ref: '#/components/schemas/PlayerRanked'
         paging:
           $ref: '#/components/schemas/SearchPaging'
+
+    RiverRace: 
+      type: object
+      properties:
+        state:
+          type: string
+        warEndTime:
+          type: string
+        collectionEndTime:
+          type: string
+        clan:
+            $ref: '#/components/schemas/RiverRaceClan'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarParticipant'
+        clans:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiverRaceClan'
+
+    RiverRaceClan:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        badgeId:
+          type: integer
+        clanScore:
+          type: integer
+        fame:
+          type: integer
+        repairPoints:
+          type: integer
+        finishTime:
+          type: String
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiverRaceClanParticipant'
+
+    RiverRaceClanParticipant:
+      type: object
+      properties:
+        tag:
+          type: string
+        name:
+          type: string
+        fame:
+          type: integer
+        repairPoints:
+          type: integer
+        boatAttacks:
+          type: integer
+
+    RiverRaceLog:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiverRaceLogEntry'
+        paging:
+          $ref: '#/components/schemas/SearchPaging'
+
+    RiverRaceLogEntry:
+      type: object
+      properties:
+        seasonId:
+          type: integer
+        sectionIndex:
+          type: integer
+        createdDate:
+          type: string
+        standings:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiverRaceStanding'
+
+    RiverRaceStanding:
+      type: object
+      properties:
+        rank:
+          type: integer
+        clanScore:
+          type: integer
+        trophyChange:
+          type: integer
+        clan:
+          type: object
+          $ref: '#/components/schemas/RiverRaceClan'
 
     SearchPaging:
       type: object
