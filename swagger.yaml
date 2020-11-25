@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: "1.0"
+  version: "1.1"
   title: Clash Royale API
   description: Unofficial Swagger definition for the official Clash Royale API
   termsOfService: http://supercell.com/en/terms-of-service/
@@ -1332,8 +1332,6 @@ components:
           type: integer
         clan:
           $ref: '#/components/schemas/ClanBase'
-        arena:
-          $ref: '#/components/schemas/Arena'
         leagueStatistics:
           $ref: '#/components/schemas/PlayerLeagueStatistics'
         achievements:
