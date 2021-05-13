@@ -1,3 +1,5 @@
+# NOTE - this project is no longer maintained. If you are a pyroyale user, and wish to take over maintaintainership of this project, please contact me.
+
 # Swagger definition for the https://api.clashroyale.com/v1
 
 This aims to be a complete swagger mapping of the Official [Clash Royale Developer API](https://developer.clashroyale.com)
