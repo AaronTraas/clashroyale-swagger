@@ -190,17 +190,17 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-  '/clans/{clanTag}/warlog':
+  '/clans/{clanTag}/riverracelog':
     get:
-      summary: Retrieve clan's clan war log
-      description: Retrieve clan's clan war log
+      summary: Retrieve clan's river race log
+      description: Retrieve clan's river race log
       tags:
         - clans
-      operationId: getClanWarLog
+      operationId: getClanRiverRaceLog
       parameters:
         - name: clanTag
           in: path
-          description: Tag of the clan whose war log to retrieve.
+          description: Tag of the clan whose river race log to retrieve.
           required: true
           schema:
             type: string
@@ -230,7 +230,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WarLog'
+                $ref: '#/components/schemas/RiverRaceLog'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -243,17 +243,17 @@ paths:
           $ref: '#/components/responses/UnknownException'
         '503':
           $ref: '#/components/responses/InMaintenance'
-  '/clans/{clanTag}/currentwar':
+  '/clans/{clanTag}/currentriverrace':
     get:
-      summary: Information about clan's current clan war
-      description: Retrieve information about clan's current clan war
+      summary: Information about clan's current river race
+      description: Retrieve information about clan's current river race
       tags:
         - clans
-      operationId: getCurrentWar
+      operationId: getCurrentRiverRace
       parameters:
         - name: clanTag
           in: path
-          description: Tag of the clan whose war log to retrieve.
+          description: Tag of the clan whose river race log to retrieve.
           required: true
           schema:
             type: string
@@ -263,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WarCurrent'
+                $ref: '#/components/schemas/RiverRaceCurrent'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -1589,23 +1589,21 @@ components:
           items:
             $ref: '#/components/schemas/TournamentPlayer'
 
-    War:
+    RiverRace:
       type: object
       properties:
         seasonId:
           type: integer
+        sectionIndex:
+          type: integer
         createdDate:
           type: string
-        participants:
-          type: array
-          items:
-            $ref: '#/components/schemas/WarParticipant'
         standings:
           type: array
           items:
-            $ref: '#/components/schemas/WarStanding'
+            $ref: '#/components/schemas/RiverRaceStanding'
 
-    WarClan:
+    RiverRaceClan:
       type: object
       properties:
         tag:
@@ -1618,16 +1616,14 @@ components:
           type: integer
         participants:
           type: integer
-        crowns:
+        fame:
           type: integer
-        battlesRemaining:
+        repairPoints:
           type: integer
-        battlesPlayed:
-          type: integer
-        wins:
+        finishTime:
           type: integer
 
-    WarCurrent:
+    RiverRaceCurrent:
       type: object
       properties:
         state:
@@ -1636,46 +1632,38 @@ components:
           type: string
         collectionEndTime:
           type: string
+        sectionIndex:
+          type: integer
         clan:
-            $ref: '#/components/schemas/WarClan'
-        participants:
-          type: array
-          items:
-            $ref: '#/components/schemas/WarParticipant'
+            $ref: '#/components/schemas/RiverRaceClan'
         clans:
           type: array
           items:
-            $ref: '#/components/schemas/WarClan'
+            $ref: '#/components/schemas/RiverRaceClan'
 
-    WarLog:
+    RiverRaceLog:
       type: object
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/War'
+            $ref: '#/components/schemas/RiverRace'
         paging:
           $ref: '#/components/schemas/SearchPaging'
 
-    WarParticipant:
+    RiverRaceParticipant:
       type: object
       properties:
         tag:
           type: string
         name:
           type: string
-        cardsEarned:
+        fame:
           type: integer
-        battlesPlayed:
-          type: integer
-        collectionDayBattlesPlayed:
-          type: integer
-        wins:
-          type: integer
-        numberOfBattles:
+        repairPoints:
           type: integer
 
-    WarStandingClan:
+    RiverRaceStandingClan:
       type: object
       properties:
         tag:
@@ -1688,18 +1676,18 @@ components:
           type: integer
         participants:
           type: integer
-        battlesPlayed:
+        fame:
           type: integer
-        wins:
+        repairPoints:
           type: integer
-        crowns:
+        finishTime:
           type: integer
 
-    WarStanding:
+    RiverRaceStanding:
       type: object
       properties:
         clan:
           type: object
-          $ref: '#/components/schemas/WarStandingClan'
+          $ref: '#/components/schemas/RiverRaceStandingClan'
         trophyChange:
           type: integer
